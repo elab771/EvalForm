@@ -112,6 +112,7 @@
             border: 1px solid var(--border-color);
             padding: 5px;
             width: 25%;
+            vertical-align: middle;
         }
 
         .meta-label {
@@ -121,6 +122,7 @@
 
         input[type="text"],
         input[type="number"],
+        select,
         textarea {
             width: 100%;
             border: none;
@@ -130,6 +132,19 @@
             box-sizing: border-box;
             padding: 2px;
             resize: none;
+        }
+
+        /* Styling for the new select dropdown */
+        select {
+            cursor: pointer;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 2px center;
+            background-size: 16px;
+            padding-right: 18px;
         }
 
         .input-container {
@@ -164,6 +179,7 @@
         }
 
         input:focus,
+        select:focus,
         textarea:focus {
             outline: none;
             background-color: #e8f0fe !important;
@@ -188,7 +204,6 @@
             font-weight: bold;
         }
 
-        /* Specific Header Color Overrides */
         .th-excellent {
             background-color: rgb(0, 176, 80) !important;
             color: rgb(255, 255, 255);
@@ -284,10 +299,23 @@
         }
 
         @media print {
+            @page {
+                size: A4 portrait;
+                margin: 0mm;
+            }
+
             body {
                 background-color: white;
                 padding: 0;
                 margin: 0;
+                width: 210mm;
+                height: 297mm;
+            }
+
+            input::placeholder,
+            textarea::placeholder {
+                color: transparent !important;
+                opacity: 0 !important;
             }
 
             .control-panel,
@@ -301,6 +329,7 @@
                 width: 210mm;
                 height: 297mm;
                 page-break-after: always;
+                page-break-inside: avoid;
             }
 
             input[type="number"].score-input {
@@ -318,39 +347,20 @@
                 -moz-appearance: textfield;
             }
 
-            .th-excellent {
-                background-color: rgb(0, 176, 80) !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
+            /* Hides dropdown arrow during print outputs */
+            select {
+                background-image: none !important;
+                background: transparent !important;
             }
 
-            .th-very-good {
-                background-color: rgb(0, 176, 240) !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-
-            .th-average {
-                background-color: rgb(255, 255, 0) !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-
-            .th-poor {
-                background-color: rgb(166, 166, 166) !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-
-            .th-unacceptable {
-                background-color: rgb(255, 0, 0) !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-
+            .th-excellent,
+            .th-very-good,
+            .th-average,
+            .th-poor,
+            .th-unacceptable,
             #overall-score-display {
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
         }
     </style>
@@ -358,7 +368,7 @@
 
 <body style="font-family: Arial, Helvetica, sans-serif; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
     <div class="control-panel">
-        <div><strong>Layout Updated:</strong> Dynamic matrix calculation and standard logo source integrated natively.</div><button class="btn-print" onclick="window.print()">Print / Export to PDF</button>
+        <div><strong>Layout Updated:</strong> Dynamic print rules hide empty placeholder prompts on generation targets.</div><button class="btn-print" onclick="window.print()">Print / Export to PDF</button>
     </div>
     <div class="page">
         <table style="width: 100%;">
@@ -379,319 +389,354 @@
                 </tr>
             </tbody>
         </table>
-        <table class="meta-table">
+        <table class="meta-table" style="padding: 1px; border-collapse: collapse; width: 100%;">
             <tbody>
                 <tr>
-                    <td class="meta-label" style="width: 19.6209%;">Project Title:</td>
-                    <td style="width: 45.586%;"><input type="text" placeholder="Enter project title"></td>
-                    <td class="meta-label" style="width: 16.1787%;">Contract No:</td>
-                    <td style="width: 18.4926%;"><input type="text" placeholder="Enter contract number"></td>
+                    <td class="meta-label" style="width: 18.5915%; padding: 1px; text-align: center;">Project Title:</td>
+                    <td style="width: 46.7026%; padding: 1px;"><span style="font-size: 12px;"><textarea rows="2" placeholder="Enter project title"></textarea></span></td>
+                    <td class="meta-label" style="width: 16.1787%; padding: 1px; text-align: center;"><span style="font-size: 12px;">Contract No:</span></td>
+                    <td style="width: 18.4926%; padding: 1px;"><span style="font-size: 12px;"><input type="text" placeholder="Enter contract number"></span></td>
                 </tr>
                 <tr>
-                    <td class="meta-label" style="width: 19.6209%;">Substation Name:</td>
-                    <td style="width: 45.586%;"><input type="text" placeholder="Enter substation name"></td>
-                    <td class="meta-label" style="width: 16.1787%;">Operating Area:</td>
-                    <td style="width: 18.4926%;"><input type="text" placeholder="Enter operating area"></td>
+                    <td class="meta-label" style="width: 18.5915%; padding: 1px; text-align: center;">Substation Name:</td>
+                    <td style="width: 46.7026%; padding: 1px; text-align: center;"><span style="font-size: 12px;"><input type="text" placeholder="Enter substation name"></span></td>
+                    <td class="meta-label" style="width: 16.1787%; padding: 1px; text-align: center;"><span style="font-size: 12px;">Operating Area:</span></td>
+                    <td style="width: 18.4926%; padding: 1px;"><span style="font-size: 12px;"><input type="text" placeholder="Enter operating area"></span></td>
                 </tr>
                 <tr>
-                    <td class="meta-label" style="width: 19.6209%;">T&amp;C Contractor:</td>
-                    <td style="width: 45.586%;"><input type="text" placeholder="Enter contractor name"></td>
-                    <td class="meta-label" style="width: 16.1787%;">T&amp;C Start Date:</td>
-                    <td style="width: 18.4926%;"><input type="text" placeholder="DD/MM/YYYY"></td>
+                    <td class="meta-label" style="width: 18.5915%; padding: 1px; text-align: center;">T&amp;C Contractor:</td>
+                    <td style="width: 46.7026%; padding: 1px;">
+                        <span style="font-size: 12px;">
+                            <select id="tc-contractor-dropdown">
+                                <option value="" disabled selected>Loading contractors...</option>
+                            </select>
+                        </span>
+                    </td>
+                    <td class="meta-label" style="width: 16.1787%; padding: 1px; text-align: center;"><span style="font-size: 12px;">T&amp;C Start Date:</span></td>
+                    <td style="width: 18.4926%; padding: 1px;"><span style="font-size: 12px;"><input type="text" placeholder="DD/MM/YYYY"></span></td>
                 </tr>
                 <tr>
-                    <td class="meta-label" style="width: 19.6209%;">Actual Progress (%):</td>
-                    <td style="width: 45.586%;"><input type="text" placeholder="Enter current progress"></td>
-                    <td class="meta-label" style="width: 16.1787%;">Evaluation Date:</td>
-                    <td style="width: 18.4926%;"><input type="text" placeholder="DD/MM/YYYY"></td>
+                    <td class="meta-label" style="width: 18.5915%; padding: 1px; text-align: center;">Actual Progress (%):</td>
+                    <td style="width: 46.7026%; padding: 1px;"><input type="text" placeholder="Enter current progress"></td>
+                    <td class="meta-label" style="width: 16.1787%; padding: 1px; text-align: center;">Evaluation Date:</td>
+                    <td style="width: 18.4926%; padding: 1px;"><input type="text" placeholder="DD/MM/YYYY"></td>
                 </tr>
             </tbody>
         </table>
-        <table class="performance-table" id="matrix">
+        <table class="performance-table" id="matrix" style="padding: 3px; border-collapse: collapse; width: 100%;">
             <thead>
                 <tr>
-                    <th style="width: 35%;">Performance Categories</th>
-                    <th style="width: 9%;" class="th-excellent">Excellent<br>(100-90)</th>
-                    <th style="width: 9%;" class="th-very-good">Very Good<br>(89-75)</th>
-                    <th style="width: 9%;" class="th-average">Average<br>(74-50)</th>
-                    <th style="width: 9%;" class="th-poor">Poor<br>(49-25)</th>
-                    <th style="width: 9%;" class="th-unacceptable">Unacceptable<br>(24-0)</th>
-                    <th style="width: 9.7054%;">Weight %</th>
-                    <th style="width: 9.8534%;">Scoring</th>
+                    <th style="width: 31.4216%; padding: 3px;" colspan="2">Performance Categories<br></th>
+                    <th style="width: 10.4902%; padding: 3px;" class="th-excellent">Excellent<br>(100-90)</th>
+                    <th style="width: 13.5309%; padding: 3px;" class="th-very-good">Very Good<br>(89-75)</th>
+                    <th style="width: 9%; padding: 3px;" class="th-average">Average<br>(74-50)</th>
+                    <th style="width: 9%; padding: 3px;" class="th-poor">Poor<br>(49-25)</th>
+                    <th style="width: 11.4522%; padding: 3px;" class="th-unacceptable">Unacceptable<br>(24-0)</th>
+                    <th style="width: 7.5061%; padding: 3px;">Weight %</th>
+                    <th style="width: 7.4939%; padding: 3px;">Scoring</th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="category-row" data-weight="30">
-                    <td class="category-title">1.) Quality of the Workmanship</td>
-                    <td>
+                    <td class="category-title" style="padding: 3px; width: 31.4216%;" colspan="2"><span style="font-size: 11px;">1.) Quality of the Workmanship</span></td>
+                    <td style="padding: 3px; width: 10.4902%;">
                         <div class="input-container"><input type="number" min="90" max="100" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 90-100</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px; width: 13.5309%;">
                         <div class="input-container"><input type="number" min="75" max="89" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 75-89</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px;">
                         <div class="input-container"><input type="number" min="50" max="74" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 50-74</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px;">
                         <div class="input-container"><input type="number" min="25" max="49" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 25-49</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px; width: 11.4522%;">
                         <div class="input-container"><input type="number" min="0" max="24" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 0-24</div>
                         </div>
                     </td>
-                    <td class="center-align" style="width: 9.7054%;">30%</td>
-                    <td class="center-align weighted-output" style="width: 9.8534%;">0.00</td>
+                    <td class="center-align" style="width: 7.5061%; padding: 3px;">30%</td>
+                    <td class="center-align weighted-output" style="width: 7.4939%; padding: 3px;">0.00</td>
                 </tr>
                 <tr class="justification-row">
-                    <td class="justification-label-cell">Justification For Score (0-50):</td>
-                    <td colspan="7" class="justification-input-cell"><textarea rows="2" placeholder="Provide justification text if score is 50 or below..."></textarea></td>
+                    <td class="justification-label-cell" style="padding: 3px; width: 16.4461%;">Justification&nbsp;<br>For Score (0-50):</td>
+                    <td class="justification-label-cell" style="padding: 3px; width: 83.5539%;" colspan="8"><textarea rows="2" placeholder="Provide justification text if score is 50 or below..."></textarea></td>
                 </tr>
                 <tr class="category-row" data-weight="20">
-                    <td class="category-title">2.) Scheduling / Productivity</td>
-                    <td>
+                    <td class="category-title" style="padding: 3px; width: 31.4216%;" colspan="2">2.) Scheduling / Productivity</td>
+                    <td style="padding: 3px; width: 10.4902%;">
                         <div class="input-container"><input type="number" min="90" max="100" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 90-100</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px; width: 13.5309%;">
                         <div class="input-container"><input type="number" min="75" max="89" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 75-89</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px;">
                         <div class="input-container"><input type="number" min="50" max="74" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 50-74</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px;">
                         <div class="input-container"><input type="number" min="25" max="49" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 25-49</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px; width: 11.4522%;">
                         <div class="input-container"><input type="number" min="0" max="24" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 0-24</div>
                         </div>
                     </td>
-                    <td class="center-align" style="width: 9.7054%;">20%</td>
-                    <td class="center-align weighted-output" style="width: 9.8534%;">0.00</td>
+                    <td class="center-align" style="width: 7.5061%; padding: 3px;">20%</td>
+                    <td class="center-align weighted-output" style="width: 7.4939%; padding: 3px;">0.00</td>
                 </tr>
                 <tr class="justification-row">
-                    <td class="justification-label-cell">Justification For Score (0-50):</td>
-                    <td colspan="7" class="justification-input-cell"><textarea rows="2" placeholder="Provide justification text if score is 50 or below..."></textarea></td>
+                    <td class="justification-label-cell" style="padding: 3px; width: 15.2941%;">Justification For Score (0-50):</td>
+                    <td class="justification-label-cell" style="padding: 3px; width: 83.5294%;" colspan="8"><textarea rows="2" placeholder="Provide justification text if score is 50 or below..."></textarea></td>
                 </tr>
                 <tr class="category-row" data-weight="15">
-                    <td class="category-title">3.) Cooperation</td>
-                    <td>
+                    <td class="category-title" style="padding: 3px; width: 31.4216%;" colspan="2">3.) Cooperation</td>
+                    <td style="padding: 3px; width: 10.4902%;">
                         <div class="input-container"><input type="number" min="90" max="100" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 90-100</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px; width: 13.5309%;">
                         <div class="input-container"><input type="number" min="75" max="89" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 75-89</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px;">
                         <div class="input-container"><input type="number" min="50" max="74" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 50-74</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px;">
                         <div class="input-container"><input type="number" min="25" max="49" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 25-49</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px; width: 11.4522%;">
                         <div class="input-container"><input type="number" min="0" max="24" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 0-24</div>
                         </div>
                     </td>
-                    <td class="center-align" style="width: 9.7054%;">15%</td>
-                    <td class="center-align weighted-output" style="width: 9.8534%;">0.00</td>
+                    <td class="center-align" style="width: 7.5061%; padding: 3px;">15%</td>
+                    <td class="center-align weighted-output" style="width: 7.4939%; padding: 3px;">0.00</td>
                 </tr>
                 <tr class="justification-row">
-                    <td class="justification-label-cell">Justification For Score (0-50):</td>
-                    <td colspan="7" class="justification-input-cell"><textarea rows="2" placeholder="Provide justification text if score is 50 or below..."></textarea></td>
+                    <td class="justification-label-cell" style="padding: 3px; width: 14.2647%;">Justification&nbsp;<br>For Score (0-50):</td>
+                    <td class="justification-label-cell" style="padding: 3px; width: 83.5294%;" colspan="8"><textarea rows="2" placeholder="Provide justification text if score is 50 or below..."></textarea></td>
                 </tr>
                 <tr class="category-row" data-weight="10">
-                    <td class="category-title">4.) Safety</td>
-                    <td>
+                    <td class="category-title" style="padding: 3px; width: 31.4216%;" colspan="2">4.) Safety</td>
+                    <td style="padding: 3px; width: 10.4902%;">
                         <div class="input-container"><input type="number" min="90" max="100" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 90-100</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px; width: 13.5309%;">
                         <div class="input-container"><input type="number" min="75" max="89" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 75-89</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px;">
                         <div class="input-container"><input type="number" min="50" max="74" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 50-74</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px;">
                         <div class="input-container"><input type="number" min="25" max="49" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 25-49</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px; width: 11.4522%;">
                         <div class="input-container"><input type="number" min="0" max="24" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 0-24</div>
                         </div>
                     </td>
-                    <td class="center-align" style="width: 9.7054%;">10%</td>
-                    <td class="center-align weighted-output" style="width: 9.8534%;">0.00</td>
+                    <td class="center-align" style="width: 7.5061%; padding: 3px;">10%</td>
+                    <td class="center-align weighted-output" style="width: 7.4939%; padding: 3px;">0.00</td>
                 </tr>
                 <tr class="justification-row">
-                    <td class="justification-label-cell">Justification For Score (0-50):</td>
-                    <td colspan="7" class="justification-input-cell"><textarea rows="2" placeholder="Provide justification text if score is 50 or below..."></textarea></td>
+                    <td class="justification-label-cell" style="padding: 3px; width: 14.2647%;">Justification For Score (0-50):</td>
+                    <td class="justification-label-cell" style="padding: 3px; width: 83.5294%;" colspan="8"><textarea rows="2" placeholder="Provide justification text if score is 50 or below..."></textarea></td>
                 </tr>
                 <tr class="category-row" data-weight="15">
-                    <td class="category-title">5.) Quality &amp; Availability of Testing Equipment/Tools</td>
-                    <td>
+                    <td class="category-title" style="padding: 3px; width: 31.4216%;" colspan="2">5.) Quality &amp; Availability of Testing Equipment/Tools</td>
+                    <td style="padding: 3px; width: 10.4902%;">
                         <div class="input-container"><input type="number" min="90" max="100" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 90-100</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px; width: 13.5309%;">
                         <div class="input-container"><input type="number" min="75" max="89" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 75-89</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px;">
                         <div class="input-container"><input type="number" min="50" max="74" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 50-74</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px;">
                         <div class="input-container"><input type="number" min="25" max="49" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 25-49</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px; width: 11.4522%;">
                         <div class="input-container"><input type="number" min="0" max="24" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 0-24</div>
                         </div>
                     </td>
-                    <td class="center-align" style="width: 9.7054%;">15%</td>
-                    <td class="center-align weighted-output" style="width: 9.8534%;">0.00</td>
+                    <td class="center-align" style="width: 7.5061%; padding: 3px;">15%</td>
+                    <td class="center-align weighted-output" style="width: 7.4939%; padding: 3px;">0.00</td>
                 </tr>
                 <tr class="justification-row">
-                    <td class="justification-label-cell">Justification For Score (0-50):</td>
-                    <td colspan="7" class="justification-input-cell"><textarea rows="2" placeholder="Provide justification text if score is 50 or below..."></textarea></td>
+                    <td class="justification-label-cell" style="padding: 3px; width: 16.4706%;">Justification&nbsp;<br>For Score (0-50):</td>
+                    <td class="justification-label-cell" style="padding: 3px; width: 83.5294%;" colspan="8"><textarea rows="2" placeholder="Provide justification text if score is 50 or below..."></textarea></td>
                 </tr>
                 <tr class="category-row" data-weight="10">
-                    <td class="category-title">6.) Quality of Documents Preparation (As per CSD Procedures)</td>
-                    <td>
+                    <td class="category-title" style="padding: 3px; width: 31.4216%;" colspan="2">6.) Quality of Documents Preparation (As per CSD Procedures)</td>
+                    <td style="padding: 3px; width: 10.4902%;">
                         <div class="input-container"><input type="number" min="90" max="100" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 90-100</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px; width: 13.5309%;">
                         <div class="input-container"><input type="number" min="75" max="89" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 75-89</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px;">
                         <div class="input-container"><input type="number" min="50" max="74" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 50-74</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px;">
                         <div class="input-container"><input type="number" min="25" max="49" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 25-49</div>
                         </div>
                     </td>
-                    <td>
+                    <td style="padding: 3px; width: 11.4522%;">
                         <div class="input-container"><input type="number" min="0" max="24" class="score-input" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 0-24</div>
                         </div>
                     </td>
-                    <td class="center-align" style="width: 9.7054%;">10%</td>
-                    <td class="center-align weighted-output" style="width: 9.8534%;">0.00</td>
+                    <td class="center-align" style="width: 7.5061%; padding: 3px;">10%</td>
+                    <td class="center-align weighted-output" style="width: 7.4939%; padding: 3px;">0.00</td>
                 </tr>
                 <tr class="justification-row">
-                    <td class="justification-label-cell">Justification For Score (0-50):</td>
-                    <td colspan="7" class="justification-input-cell"><textarea rows="2" placeholder="Provide justification text if score is 50 or below..."></textarea></td>
+                    <td class="justification-label-cell" style="padding: 3px; width: 14.2647%;">Justification&nbsp;<br>For Score (0-50):</td>
+                    <td class="justification-label-cell" style="padding: 3px; width: 83.5294%;" colspan="8"><textarea rows="2" placeholder="Provide justification text if score is 50 or below..."></textarea></td>
                 </tr>
                 <tr>
-                    <td style="width: 100%;" colspan="8"><br></td>
+                    <td style="width: 100%; background-color: rgb(255, 255, 255); height: 0.3px; padding: 3px; border-left: rgb(0, 0, 0); border-right: rgb(0, 0, 0); border-bottom: rgb(0, 0, 0);" colspan="9"><br></td>
                 </tr>
             </tbody>
         </table>
-        <table class="summary-table" style="margin-right: calc(0%); width: 100%;">
+        <table class="summary-table" style="width: 100%; padding: 1px; border-collapse: collapse;">
             <tbody>
                 <tr>
-                    <td style="width: 33.5915%; font-weight: bold; background-color: rgb(242, 242, 242);">Overall Performance Score &amp; Rating:</td>
-                    <td style="width: 66.2614%; font-weight: bold; font-size: 13px; padding-left: 12px; background-color: rgb(255, 0, 0); color: white;" class="left-align" id="overall-score-display">0.00% = UNACCEPTABLE</td>
+                    <td style="width: 33.5915%; font-weight: bold; background-color: rgb(242, 242, 242); padding: 1px; height: 2px;">Overall Performance Score &amp; Rating:</td>
+                    <td style="width: 66.2614%; font-weight: bold; font-size: 13px; padding: 1px; background-color: rgb(255, 0, 0); color: white; height: 5px;" class="left-align" id="overall-score-display">0.00% = UNACCEPTABLE</td>
                 </tr>
                 <tr>
-                    <td colspan="2"><strong>Further Remarks:</strong><span style="font-size: 10px; color:#555;">(If Overall Score is from 0-74)</span><textarea rows="2" style="margin-top: 5px;" placeholder="Enter further remarks here..."></textarea></td>
+                    <td colspan="2" style="padding: 1px; text-align: left;"><strong>Further Remarks:</strong><span style="font-size: 10px; color:#555;">(If Overall Score is from 0-74)</span><textarea rows="2" style="margin-top: 5px;" placeholder="Enter further remarks here..."></textarea></td>
                 </tr>
             </tbody>
         </table>
-        <table class="sign-table">
+        <table class="sign-table" style="border-collapse: collapse; padding: 5px; width: 100%;">
             <thead>
                 <tr>
-                    <th style="width: 34.1797%; background-color: rgb(255, 255, 255);">Evaluated By:</th>
-                    <th style="width: 30.6732%;">
+                    <th style="width: 34.1797%; background-color: rgb(255, 255, 255); padding: 5px;">Evaluated By:</th>
+                    <th style="width: 30.6732%; padding: 5px;">
                         <div style="text-align: center;">Name</div>
                     </th>
-                    <th style="width: 15.0002%;">
+                    <th style="width: 15.0002%; padding: 5px;">
                         <div style="text-align: center;">Date</div>
                     </th>
-                    <th style="width: 19.9998%;">
+                    <th style="width: 19.9998%; padding: 5px;">
                         <div style="text-align: center;">Signature</div>
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td class="meta-label" style="width: 34.1797%;">CSD Team Leader</td>
-                    <td style="width: 30.6732%;"><input type="text"></td>
-                    <td style="width: 15.0002%;"><input type="text"></td>
-                    <td style="width: 19.9998%;"><br></td>
+                    <td class="meta-label" style="width: 34.1797%; padding: 5px;">CSD Team Leader</td>
+                    <td style="width: 30.6732%; padding: 5px;"><input type="text"></td>
+                    <td style="width: 15.0002%; padding: 5px;"><input type="text"></td>
+                    <td style="width: 19.9998%; padding: 5px;"><br></td>
                 </tr>
                 <tr>
-                    <td class="meta-label" style="width: 34.1797%;">CSD QC Senior Engineer</td>
-                    <td style="width: 30.6732%;"><input type="text"></td>
-                    <td style="width: 15.0002%;"><input type="text"></td>
-                    <td style="width: 19.9998%;"><br></td>
+                    <td class="meta-label" style="width: 34.1797%; padding: 5px;">CSD QC Senior Engineer</td>
+                    <td style="width: 30.6732%; padding: 5px;"><input type="text"></td>
+                    <td style="width: 15.0002%; padding: 5px;"><input type="text"></td>
+                    <td style="width: 19.9998%; padding: 5px;"><br></td>
                 </tr>
                 <tr>
-                    <td class="meta-label" style="width: 34.1797%;">CSD Divisional Qualification Coordinator</td>
-                    <td style="width: 30.6732%;"><input type="text"></td>
-                    <td style="width: 15.0002%;"><input type="text"></td>
-                    <td style="width: 19.9998%;"><br></td>
+                    <td class="meta-label" style="width: 34.1797%; padding: 5px;">CSD Divisional Qualification Coordinator</td>
+                    <td style="width: 30.6732%; padding: 5px;"><input type="text"></td>
+                    <td style="width: 15.0002%; padding: 5px;"><input type="text"></td>
+                    <td style="width: 19.9998%; padding: 5px;"><br></td>
                 </tr>
                 <tr>
-                    <td style="width: 34.1797%; border: rgb(0, 0, 0);">ApprovedBy:</td>
-                    <td style="width: 30.6732%; border: rgb(0, 0, 0);"><br></td>
-                    <td style="border: rgb(0, 0, 0); width: 15.0002%;"><br></td>
-                    <td style="width: 19.9998%; border: rgb(0, 0, 0);"><br></td>
+                    <td style="width: 34.1797%; padding: 5px;">Approved By:&nbsp;</td>
+                    <td style="width: 30.6732%; padding: 5px;"><br></td>
+                    <td style="width: 15.0002%; padding: 5px;"><br></td>
+                    <td style="width: 19.9998%; padding: 5px;"><br></td>
                 </tr>
                 <tr>
-                    <td class="meta-label" style="width: 34.1797%;">CSD Division Manager</td>
-                    <td style="width: 30.6732%;" class="fr-cell-fixed "><input type="text"></td>
-                    <td style="width: 15.0002%;"><input type="text"></td>
-                    <td style="width: 19.9998%;" class="fr-cell-handler "><br></td>
+                    <td class="meta-label" style="width: 34.1797%; padding: 5px;">CSD Division Manager</td>
+                    <td style="width: 30.6732%; padding: 5px;"><input type="text"></td>
+                    <td style="width: 15.0002%; padding: 5px;"><input type="text"></td>
+                    <td style="width: 19.9998%; padding: 5px;"><br></td>
                 </tr>
             </tbody>
         </table>
         <div class="footer-note">Archiving System Website: http://ngridsa-apps/amas Page 1 of 1</div>
     </div>
     <script>
+        // Run on page load to fetch the data rowsource
+        window.addEventListener('DOMContentLoaded', () => {
+            const dropdown = document.getElementById('tc-contractor-dropdown');
+            
+            fetch('TCContractors.txt')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network error or file missing.');
+                    }
+                    return response.text();
+                })
+                .then(text => {
+                    // Split content by lines, filter empty lines, and map to options
+                    const contractors = text.split(/\r?\n/).filter(line => line.trim() !== "");
+                    
+                    dropdown.innerHTML = '<option value="" disabled selected>Select Contractor</option>';
+                    contractors.forEach(contractor => {
+                        const opt = document.createElement('option');
+                        opt.value = contractor.trim();
+                        opt.textContent = contractor.trim();
+                        dropdown.appendChild(opt);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    dropdown.innerHTML = '<option value="" disabled selected>Error loading rowsource</option>';
+                });
+        });
+
         function handleInputRule(currentInput) {
             const row = currentInput.closest('.category-row');
             const inputs = row.querySelectorAll('.score-input');
