@@ -788,20 +788,51 @@
                     });
                 }
                 
-                // This function was updated to read the exact lowercase indices safely
                 function filterAndPopulateEmployees() {
-                    const area = document.getElementById('operating-area-dropdown').value.toLowerCase().trim();
-                    if (!area || cachedEmployees.length === 0) return;
+                            const area = document.getElementById('operating-area-dropdown').value.toLowerCase().trim();
+                            if (!area || cachedEmployees.length === 0) return;
                 
-                    // Fix: Now uses clean bracket syntax to safely pull lowercase properties
-                    const areaStaff = cachedEmployees.filter(emp => emp['area'] && emp['area'].toLowerCase().trim() === area);
-                    
-                    const divisionManagers = cachedEmployees.filter(emp => 
-                        emp['area'] && emp['area'].toLowerCase().trim() === area && 
-                        emp['nationality'] && emp['nationality'].toLowerCase().trim() === 'saudi'
-                    );
+                            // Normalize and match safely by removing any lingering carriage returns (\r)
+                            const areaStaff = cachedEmployees.filter(emp => {
+                                const empArea = emp['area'] ? emp['area'].toLowerCase().replace(/\r/g, '').trim() : '';
+                                return empArea === area;
+                            });
+                            
+                            const divisionManagers = cachedEmployees.filter(emp => {
+                                const empArea = emp['area'] ? emp['area'].toLowerCase().replace(/\r/g, '').trim() : '';
+                                const empNat = emp['nationality'] ? emp['nationality'].toLowerCase().replace(/\r/g, '').trim() : '';
+                                return empArea === area && empNat === 'saudi';
+                            });
                 
-                    // ... Dropdown selection mapping follows right below
+                            // Populate standard roles
+                            const standardDropdowns = ['dropdown-team-leader', 'dropdown-qc-engineer', 'dropdown-qual-coordinator'];
+                            standardDropdowns.forEach(id => {
+                                const select = document.getElementById(id);
+                                select.innerHTML = '<option value="" disabled selected>Select Name</option>';
+                                areaStaff.forEach(emp => {
+                                    if (emp['employeename']) {
+                                        const cleanName = emp['employeename'].replace(/\r/g, '').trim();
+                                        const opt = document.createElement('option');
+                                        opt.value = cleanName;
+                                        opt.textContent = cleanName;
+                                        select.appendChild(opt);
+                                    }
+                                });
+                            });
+                
+                            // Populate Division Manager
+                            const managerSelect = document.getElementById('dropdown-division-manager');
+                            managerSelect.innerHTML = '<option value="" disabled selected>Select Name</option>';
+                            divisionManagers.forEach(emp => {
+                                if (emp['employeename']) {
+                                    const cleanName = emp['employeename'].replace(/\r/g, '').trim();
+                                    const opt = document.createElement('option');
+                                    opt.value = cleanName;
+                                    opt.textContent = cleanName;
+                                    managerSelect.appendChild(opt);
+                                }
+                            });
+                        }
 
             const standardDropdowns = ['dropdown-team-leader', 'dropdown-qc-engineer', 'dropdown-qual-coordinator'];
             standardDropdowns.forEach(id => {
