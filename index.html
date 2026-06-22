@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>T&C Contractor Performance Report</title>
-    <!-- Include SheetJS (XLSX) Library to parse excel sheets directly in the browser -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         :root {
@@ -205,7 +204,7 @@
             background-color: #fffdec;
             border: 1px dashed #ccc;
             border-radius: 3px;
-            padding: 4px 2px;
+            padding: 3px 2px;
             transition: background-color 0.2s ease, color 0.2s ease;
         }
 
@@ -249,10 +248,6 @@
         .performance-table td {
             border: 1px solid var(--border-color);
             padding: 3px 4px;
-        }
-
-        .performance-table td {
-            height: 32px;
         }
 
         .performance-table th {
@@ -524,7 +519,7 @@
 
 <body style="font-family: Arial, Helvetica, sans-serif; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
     <div class="control-panel">
-        <div><strong>Layout Finalized:</strong> Score fields mirror header backgrounds, and signatory lists display edge-to-edge.</div>
+        <div><strong>Layout Reverted:</strong> Category rows returned to original default height specification tracking.</div>
         <button class="btn-print" onclick="window.print()">Print / Export to PDF</button>
     </div>
     <div class="page">
@@ -604,7 +599,6 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Row 1 -->
                 <tr class="category-row" data-weight="30">
                     <td class="category-title" style="padding: 3px; width: 31.4216%;" colspan="2"><span style="font-size: 11px;">1.) Quality of the Workmanship</span></td>
                     <td style="padding: 0; width: 11.7625%;">
@@ -639,7 +633,6 @@
                     <td class="justification-label-cell" style="padding: 3px; width: 16.4461%;">Justification&nbsp;<br>For Score (0-50):</td>
                     <td class="justification-label-cell" style="padding: 3px; width: 83.5539%;" colspan="8"><textarea rows="2" placeholder="Provide justification text if score is 50 or below..."></textarea></td>
                 </tr>
-                <!-- Row 2 -->
                 <tr class="category-row" data-weight="20">
                     <td class="category-title" style="padding: 3px; width: 31.4216%;" colspan="2">2.) Scheduling / Productivity</td>
                     <td style="padding: 0; width: 11.7625%;">
@@ -674,7 +667,6 @@
                     <td class="justification-label-cell" style="padding: 3px; width: 15.2941%;">Justification For Score (0-50):</td>
                     <td class="justification-label-cell" style="padding: 3px; width: 83.5294%;" colspan="8"><textarea rows="2" placeholder="Provide justification text if score is 50 or below..."></textarea></td>
                 </tr>
-                <!-- Row 3 -->
                 <tr class="category-row" data-weight="15">
                     <td class="category-title" style="padding: 3px; width: 31.4216%;" colspan="2">3.) Cooperation</td>
                     <td style="padding: 0; width: 11.7625%;">
@@ -709,7 +701,6 @@
                     <td class="justification-label-cell" style="padding: 3px; width: 14.2647%;">Justification&nbsp;<br>For Score (0-50):</td>
                     <td class="justification-label-cell" style="padding: 3px; width: 83.5294%;" colspan="8"><textarea rows="2" placeholder="Provide justification text if score is 50 or below..."></textarea></td>
                 </tr>
-                <!-- Row 4 -->
                 <tr class="category-row" data-weight="10">
                     <td class="category-title" style="padding: 3px; width: 31.4216%;" colspan="2">4.) Safety</td>
                     <td style="padding: 0; width: 11.7625%;">
@@ -744,7 +735,6 @@
                     <td class="justification-label-cell" style="padding: 3px; width: 14.2647%;">Justification For Score (0-50):</td>
                     <td class="justification-label-cell" style="padding: 3px; width: 83.5294%;" colspan="8"><textarea rows="2" placeholder="Provide justification text if score is 50 or below..."></textarea></td>
                 </tr>
-                <!-- Row 5 -->
                 <tr class="category-row" data-weight="15">
                     <td class="category-title" style="padding: 3px; width: 31.4216%;" colspan="2">5.) Quality &amp; Availability of Testing Equipment/Tools</td>
                     <td style="padding: 0; width: 11.7625%;">
@@ -779,7 +769,6 @@
                     <td class="justification-label-cell" style="padding: 3px; width: 16.4706%;">Justification&nbsp;<br>For Score (0-50):</td>
                     <td class="justification-label-cell" style="padding: 3px; width: 83.5294%;" colspan="8"><textarea rows="2" placeholder="Provide justification text if score is 50 or below..."></textarea></td>
                 </tr>
-                <!-- Row 6 -->
                 <tr class="category-row" data-weight="10">
                     <td class="category-title" style="padding: 3px; width: 31.4216%;" colspan="2">6.) Quality of Documents Preparation (As per CSD Procedures)</td>
                     <td style="padding: 0; width: 11.7625%;">
@@ -831,7 +820,6 @@
             </tbody>
         </table>
         
-        <!-- Signatures Section -->
         <table class="sign-table" style="border-collapse: collapse; width: 100%;">
             <thead>
                 <tr>
@@ -842,7 +830,6 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Team Leader Row -->
                 <tr>
                     <td class="meta-label" style="padding: 5px;">CSD Team Leader</td>
                     <td class="full-cell-input-td" style="padding: 5px;">
@@ -871,7 +858,6 @@
                         </div>
                     </td>
                 </tr>
-                <!-- QC Senior Engineer Row -->
                 <tr>
                     <td class="meta-label" style="padding: 5px;">CSD QC Senior Engineer</td>
                     <td class="full-cell-input-td" style="padding: 5px;">
@@ -900,7 +886,6 @@
                         </div>
                     </td>
                 </tr>
-                <!-- Qualification Coordinator Row -->
                 <tr>
                     <td class="meta-label" style="padding: 5px;">CSD Divisional Qualification Coordinator</td>
                     <td class="full-cell-input-td" style="padding: 5px;">
@@ -929,11 +914,9 @@
                         </div>
                     </td>
                 </tr>
-                <!-- Division Approval Header Break -->
                 <tr>
                     <td style="padding: 5px; font-weight: bold; border-top: 1px solid var(--border-color);" colspan="4">Approved By:&nbsp;</td>
                 </tr>
-                <!-- Division Manager Row -->
                 <tr>
                     <td class="meta-label" style="padding: 5px;">CSD Division Manager</td>
                     <td class="full-cell-input-td" style="padding: 5px;">
@@ -994,7 +977,7 @@
                     dropdown.innerHTML = '<option value="" disabled selected>Error loading rowsource</option>';
                 });
 
-            // Fetches lowercase target sheet name per instruction setup specifications
+            // Fetches data cleanly from renamed lowercase file asset
             fetch('employees.xlsx')
                 .then(response => {
                     if (!response.ok) throw new Error('Excel structural data mapping file is missing.');
@@ -1095,7 +1078,7 @@
                 inputs.forEach(input => {
                     if (input !== currentInput) {
                         input.value = ""; 
-                        input.style.backgroundColor = '#fffdec'; // Reset default colors
+                        input.style.backgroundColor = '#fffdec'; 
                         input.style.color = '#000';
                         input.classList.remove('invalid-range'); 
                         const errorPrompt = input.nextElementSibling;
@@ -1103,7 +1086,6 @@
                     }
                 });
                 
-                // Color matching logic engine script
                 if (currentInput.checkValidity()) {
                     currentInput.style.backgroundColor = currentInput.getAttribute('data-color');
                     currentInput.style.color = currentInput.getAttribute('data-text');
