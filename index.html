@@ -135,7 +135,6 @@
             resize: none;
         }
 
-        /* Styling for select dropdowns */
         select {
             cursor: pointer;
             -webkit-appearance: none;
@@ -146,6 +145,8 @@
             background-position: right 2px center;
             background-size: 16px;
             padding-right: 18px;
+            white-space: normal;
+            word-wrap: break-word;
         }
 
         .input-container {
@@ -299,25 +300,6 @@
             color: #666;
         }
 
-        .sig-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .sig-upload {
-            font-size: 10px;
-            width: 100%;
-        }
-
-        .sig-preview {
-            max-height: 40px;
-            max-width: 100%;
-            display: none;
-            object-fit: contain;
-        }
-
         @media print {
             @page {
                 size: A4 portrait;
@@ -339,13 +321,8 @@
             }
 
             .control-panel,
-            .error-prompt,
-            .sig-upload {
+            .error-prompt {
                 display: none !important;
-            }
-
-            .sig-preview {
-                display: block !important;
             }
 
             .page {
@@ -394,7 +371,7 @@
 
 <body style="font-family: Arial, Helvetica, sans-serif; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
     <div class="control-panel">
-        <div><strong>Layout Updated:</strong> Operational roles, signatory mappings, and upload configurations finalized.</div>
+        <div><strong>Layout Updated:</strong> Operational roles, signatory mappings, and row inputs finalized.</div>
         <button class="btn-print" onclick="window.print()">Print / Export to PDF</button>
     </div>
     <div class="page">
@@ -442,7 +419,13 @@
                 </tr>
                 <tr>
                     <td class="meta-label" style="width: 18.5915%; padding: 1px; text-align: center;">T&amp;C Contractor:</td>
-                    <td style="width: 46.7026%; padding: 1px;"><span style="font-size: 12px;">&nbsp;<select id="tc-contractor-dropdown">&nbsp;<option value="" disabled="" selected="">Loading contractors...</option>&nbsp;</select>&nbsp;</span></td>
+                    <td style="width: 46.7026%; padding: 1px;" colspan="1">
+                        <span style="font-size: 12px;">
+                            <select id="tc-contractor-dropdown" style="width: 100%; white-space: normal;">
+                                <option value="" disabled selected>Loading contractors...</option>
+                            </select>
+                        </span>
+                    </td>
                     <td class="meta-label" style="width: 16.1787%; padding: 1px; text-align: center;"><span style="font-size: 12px;">T&amp;C Start Date:</span></td>
                     <td style="width: 18.4926%; padding: 1px;"><span style="font-size: 12px;"><input type="date" id="tc-start-date"></span></td>
                 </tr>
@@ -707,35 +690,20 @@
                 <tr>
                     <td class="meta-label" style="width: 34.1797%; padding: 5px;">CSD Team Leader</td>
                     <td style="width: 31.6131%; padding: 5px;"><select class="employee-dropdown" id="dropdown-team-leader"><option value="">Select Area First</option></select></td>
-                    <td style="width: 15.1516%; padding: 5px;"><input type="date" class="signatory-date" readonly></td>
-                    <td style="width: 18.9407%; padding: 5px;">
-                        <div class="sig-container">
-                            <input type="file" accept="image/*" class="sig-upload" onchange="handleSignatureUpload(this)">
-                            <img class="sig-preview" alt="Signature">
-                        </div>
-                    </td>
+                    <td style="width: 15.1516%; padding: 5px;"><input type="date" class="signatory-date"></td>
+                    <td style="width: 18.9407%; padding: 5px;"></td>
                 </tr>
                 <tr>
                     <td class="meta-label" style="width: 34.1797%; padding: 5px;">CSD QC Senior Engineer</td>
                     <td style="width: 31.6131%; padding: 5px;"><select class="employee-dropdown" id="dropdown-qc-engineer"><option value="">Select Area First</option></select></td>
-                    <td style="width: 15.1516%; padding: 5px;"><input type="date" class="signatory-date" readonly></td>
-                    <td style="width: 18.9407%; padding: 5px;">
-                        <div class="sig-container">
-                            <input type="file" accept="image/*" class="sig-upload" onchange="handleSignatureUpload(this)">
-                            <img class="sig-preview" alt="Signature">
-                        </div>
-                    </td>
+                    <td style="width: 15.1516%; padding: 5px;"><input type="date" class="signatory-date"></td>
+                    <td style="width: 18.9407%; padding: 5px;"></td>
                 </tr>
                 <tr>
                     <td class="meta-label" style="width: 34.1797%; padding: 5px;">CSD Divisional Qualification Coordinator</td>
                     <td style="width: 31.6131%; padding: 5px;"><select class="employee-dropdown" id="dropdown-qual-coordinator"><option value="">Select Area First</option></select></td>
-                    <td style="width: 15.1516%; padding: 5px;"><input type="date" class="signatory-date" readonly></td>
-                    <td style="width: 18.9407%; padding: 5px;">
-                        <div class="sig-container">
-                            <input type="file" accept="image/*" class="sig-upload" onchange="handleSignatureUpload(this)">
-                            <img class="sig-preview" alt="Signature">
-                        </div>
-                    </td>
+                    <td style="width: 15.1516%; padding: 5px;"><input type="date" class="signatory-date"></td>
+                    <td style="width: 18.9407%; padding: 5px;"></td>
                 </tr>
                 <tr>
                     <td style="width: 34.1797%; padding: 5px;">Approved By:&nbsp;</td>
@@ -746,13 +714,8 @@
                 <tr>
                     <td class="meta-label" style="width: 34.1797%; padding: 5px;">CSD Division Manager</td>
                     <td style="width: 31.6131%; padding: 5px;"><select id="dropdown-division-manager"><option value="">Select Area First</option></select></td>
-                    <td style="width: 15.1516%; padding: 5px;"><input type="date" class="signatory-date" readonly></td>
-                    <td style="width: 18.9407%; padding: 5px;">
-                        <div class="sig-container">
-                            <input type="file" accept="image/*" class="sig-upload" onchange="handleSignatureUpload(this)">
-                            <img class="sig-preview" alt="Signature">
-                        </div>
-                    </td>
+                    <td style="width: 15.1516%; padding: 5px;"><input type="date" class="signatory-date"></td>
+                    <td style="width: 18.9407%; padding: 5px;"></td>
                 </tr>
             </tbody>
         </table>
@@ -851,18 +814,6 @@
                 opt.textContent = emp.EmployeeName;
                 managerSelect.appendChild(opt);
             });
-        }
-
-        function handleSignatureUpload(input) {
-            const preview = input.nextElementSibling;
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
         }
         
         function handleInputRule(currentInput) {
