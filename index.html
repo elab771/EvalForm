@@ -770,29 +770,38 @@
             document.getElementById('operating-area-dropdown').addEventListener('change', filterAndPopulateEmployees);
         });
 
-        function parseCSV(text) {
-            const lines = text.split(/\r?\n/).filter(line => line.trim() !== "");
-            if (lines.length === 0) return [];
-            const headers = lines[0].split(',').map(h => h.trim());
-            return lines.slice(1).map(line => {
-                const values = line.split(',').map(v => v.trim());
-                const obj = {};
-                headers.forEach((header, i) => {
-                    obj[header] = values[i] || "";
-                });
-                return obj;
-            });
-        }
-
-        function filterAndPopulateEmployees() {
-            const area = document.getElementById('operating-area-dropdown').value;
-            if (!area || cachedEmployees.length === 0) return;
-
-            // Filter for generic CSD staff
-            const areaStaff = cachedEmployees.filter(emp => emp.area === area);
-            
-            // Filter for Division Manager (Area matches & Nationality is Saudi)
-            const divisionManagers = cachedEmployees.filter(emp => emp.area === area && emp.nationality && emp.nationality.toLowerCase() === 'saudi');
+                // This function was modified to trim spaces from headers
+                function parseCSV(text) {
+                    const lines = text.split(/\r?\n/).filter(line => line.trim() !== "");
+                    if (lines.length === 0) return [];
+                    
+                    // Fix: Added .trim() to clean out structural spacing between columns
+                    const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+                    
+                    return lines.slice(1).map(line => {
+                        const values = line.split(',').map(v => v.trim());
+                        const obj = {};
+                        headers.forEach((header, i) => {
+                            obj[header] = values[i] || "";
+                        });
+                        return obj;
+                    });
+                }
+                
+                // This function was updated to read the exact lowercase indices safely
+                function filterAndPopulateEmployees() {
+                    const area = document.getElementById('operating-area-dropdown').value.toLowerCase().trim();
+                    if (!area || cachedEmployees.length === 0) return;
+                
+                    // Fix: Now uses clean bracket syntax to safely pull lowercase properties
+                    const areaStaff = cachedEmployees.filter(emp => emp['area'] && emp['area'].toLowerCase().trim() === area);
+                    
+                    const divisionManagers = cachedEmployees.filter(emp => 
+                        emp['area'] && emp['area'].toLowerCase().trim() === area && 
+                        emp['nationality'] && emp['nationality'].toLowerCase().trim() === 'saudi'
+                    );
+                
+                    // ... Dropdown selection mapping follows right below
 
             const standardDropdowns = ['dropdown-team-leader', 'dropdown-qc-engineer', 'dropdown-qual-coordinator'];
             standardDropdowns.forEach(id => {
