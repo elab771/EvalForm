@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=210mm, initial-scale=0.3, maximum-scale=2.0, user-scalable=yes">
     <title>T&C Contractor Performance Report</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
@@ -23,11 +23,14 @@
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 20px 10px;
             background-color: #666;
             display: flex;
             flex-direction: column;
             align-items: center;
+            /* Mobile canvas stability adjustments */
+            min-width: 210mm;
+            box-sizing: border-box;
         }
 
         .control-panel {
@@ -40,6 +43,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-sizing: border-box;
         }
 
         .btn-print {
@@ -67,6 +71,7 @@
             position: relative;
             display: flex;
             flex-direction: column;
+            margin: 0 auto; /* Forces structural center orientation balance */
         }
 
         .header-table {
@@ -528,7 +533,7 @@
 
 <body style="font-family: Arial, Helvetica, sans-serif; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
     <div class="control-panel">
-        <div><strong>Layout Updated:</strong> Input boxes for Categories 5 and 6 maxed out straight to container edges.</div>
+        <div><strong>Deployment Core:</strong> Centered view matrix layout configured for unified mobile browser parsing templates.</div>
         <button class="btn-print" onclick="window.print()">Print / Export to PDF</button>
     </div>
     <div class="page">
@@ -986,7 +991,7 @@
                     dropdown.innerHTML = '<option value="" disabled selected>Error loading rowsource</option>';
                 });
 
-            // Reads data natively from the local file directory target asset location
+            // Fetches data cleanly from renamed lowercase file asset
             fetch('employees.xlsx')
                 .then(response => {
                     if (!response.ok) throw new Error('Excel structural data mapping file is missing.');
