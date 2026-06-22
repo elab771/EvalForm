@@ -115,6 +115,14 @@
             vertical-align: middle;
         }
 
+        /* Full-Cell Grid Expansion Styles for Meta Content fields */
+        .full-cell-input-td {
+            padding: 0 !important;
+            height: 32px;
+            vertical-align: middle;
+            position: relative;
+        }
+
         .meta-label {
             font-weight: bold;
             background-color: #f2f2f2;
@@ -142,16 +150,33 @@
             appearance: none;
             background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
             background-repeat: no-repeat;
-            background-position: right 2px center;
+            background-position: right 4px center;
             background-size: 16px;
-            padding-right: 18px;
+            padding-right: 20px;
             white-space: normal;
             word-wrap: break-word;
         }
 
+        /* Unified Full-Bleed Cell Format Engine rules for T&C Dropdown Container Elements */
+        .contractor-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
         #tc-contractor-dropdown {
             width: 100%;
+            height: 100%;
             display: block;
+            padding: 4px 22px 4px 6px;
+            background-color: transparent;
+            white-space: normal;  /* Forces text wrapper layers to split long text blocks across lines */
+            word-break: break-word;
+            line-height: 1.2;
         }
 
         .input-container {
@@ -289,12 +314,103 @@
         .sign-table th,
         .sign-table td {
             border: 1px solid var(--border-color);
-            padding: 5px;
             text-align: left;
         }
 
         .sign-table th {
+            padding: 4px 5px;
             background-color: #f2f2f2;
+        }
+
+        .signature-td-cell {
+            position: relative;
+            padding: 0 !important;
+            height: 42px;
+            vertical-align: middle;
+        }
+
+        .signature-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .signature-pad-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .signature-pad {
+            width: 100%;
+            height: 100%;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            cursor: crosshair;
+            display: block;
+        }
+
+        .uploaded-img-preview {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            background-color: #ffffff;
+            display: none;
+            z-index: 1;
+        }
+
+        .signature-actions {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 5;
+        }
+
+        .action-icon-btn {
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        
+        .action-icon-btn:hover {
+            opacity: 0.9;
+        }
+
+        .action-icon-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        .btn-upload-sig {
+            background-color: #007bff;
+        }
+
+        .btn-clear-sig {
+            background-color: #6c757d;
         }
 
         .footer-note {
@@ -326,7 +442,9 @@
             }
 
             .control-panel,
-            .error-prompt {
+            .error-prompt,
+            .signature-actions,
+            .action-icon-btn {
                 display: none !important;
             }
 
@@ -361,6 +479,11 @@
                 background: transparent !important;
             }
 
+            .signature-pad {
+                border: none !important;
+                background-color: transparent !important;
+            }
+
             .th-excellent,
             .th-very-good,
             .th-average,
@@ -376,7 +499,7 @@
 
 <body style="font-family: Arial, Helvetica, sans-serif; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
     <div class="control-panel">
-        <div><strong>Layout Updated:</strong> Operational roles, signatory mappings, and configurations finalized.</div>
+        <div><strong>Layout Updated:</strong> T&amp;C Contractor dropdown formatted to full cell dimensions with explicit text wrapping.</div>
         <button class="btn-print" onclick="window.print()">Print / Export to PDF</button>
     </div>
     <div class="page">
@@ -424,7 +547,14 @@
                 </tr>
                 <tr>
                     <td class="meta-label" style="width: 18.5915%; padding: 1px; text-align: center;">T&amp;C Contractor:</td>
-                    <td style="width: 46.7026%; padding: 1px;"><span style="font-size: 12px;">&nbsp;<select id="tc-contractor-dropdown">&nbsp;<option value="" disabled="" selected="">Loading contractors...</option>&nbsp;</select>&nbsp;</span></td>
+                    <!-- Updated Table Cell and Container Wrapper matching full-bleed signature alignment specifications -->
+                    <td class="full-cell-input-td" style="width: 46.7026%;">
+                        <div class="contractor-container">
+                            <select id="tc-contractor-dropdown">
+                                <option value="" disabled selected>Loading contractors...</option>
+                            </select>
+                        </div>
+                    </td>
                     <td class="meta-label" style="width: 16.1787%; padding: 1px; text-align: center;"><span style="font-size: 12px;">T&amp;C Start Date:</span></td>
                     <td style="width: 18.4926%; padding: 1px;"><span style="font-size: 12px;"><input type="date" id="tc-start-date"></span></td>
                 </tr>
@@ -670,50 +800,122 @@
                 </tr>
             </tbody>
         </table>
-        <table class="sign-table" style="border-collapse: collapse; padding: 5px; width: 100%;">
+        
+        <!-- Signatures Matrix -->
+        <table class="sign-table" style="border-collapse: collapse; width: 100%;">
             <thead>
                 <tr>
-                    <th style="width: 34.1797%; background-color: rgb(255, 255, 255); padding: 5px;">Evaluated By:</th>
-                    <th style="width: 45%; padding: 5px;">
-                        <div style="text-align: center;">Name</div>
-                    </th>
-                    <th style="width: 20.8203%; padding: 5px;">
-                        <div style="text-align: center;">Date</div>
-                    </th>
+                    <th style="width: 35%; background-color: rgb(255, 255, 255); padding: 5px;">Evaluated By:</th>
+                    <th style="width: 33%; padding: 5px;"><div style="text-align: center;">Name</div></th>
+                    <th style="width: 14%; padding: 5px;"><div style="text-align: center;">Date</div></th>
+                    <th style="width: 18%; padding: 5px;"><div style="text-align: center;">Signature</div></th>
                 </tr>
             </thead>
             <tbody>
+                <!-- Team Leader Row -->
                 <tr>
-                    <td class="meta-label" style="width: 34.1797%; padding: 5px;">CSD Team Leader</td>
-                    <td style="width: 45%; padding: 5px;"><select class="employee-dropdown" id="dropdown-team-leader"><option value="">Select Area First</option></select></td>
-                    <td style="width: 20.8203%; padding: 5px;"><input type="date" class="signatory-date"></td>
+                    <td class="meta-label" style="padding: 5px;">CSD Team Leader</td>
+                    <td style="padding: 5px;"><select class="employee-dropdown" id="dropdown-team-leader"><option value="">Select Area First</option></select></td>
+                    <td style="padding: 5px;"><input type="date" class="signatory-date"></td>
+                    <td class="signature-td-cell">
+                        <div class="signature-container">
+                            <div class="signature-pad-wrapper">
+                                <canvas id="sig-canvas-team-leader" class="signature-pad" width="180" height="42"></canvas>
+                                <img id="sig-img-team-leader" class="uploaded-img-preview" alt="Signature preview">
+                            </div>
+                            <div class="signature-actions">
+                                <button type="button" class="action-icon-btn btn-clear-sig" onclick="clearSignature('team-leader')" title="Clear Signature">
+                                    <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                </button>
+                                <button type="button" class="action-icon-btn btn-upload-sig" onclick="triggerUpload('file-team-leader')" title="Upload Image">
+                                    <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
+                                </button>
+                                <input type="file" id="file-team-leader" accept="image/*" style="display:none" onchange="handleSignatureUpload(this, 'team-leader')">
+                            </div>
+                        </div>
+                    </td>
                 </tr>
+                <!-- QC Senior Engineer Row -->
                 <tr>
-                    <td class="meta-label" style="width: 34.1797%; padding: 5px;">CSD QC Senior Engineer</td>
-                    <td style="width: 45%; padding: 5px;"><select class="employee-dropdown" id="dropdown-qc-engineer"><option value="">Select Area First</option></select></td>
-                    <td style="width: 20.8203%; padding: 5px;"><input type="date" class="signatory-date"></td>
+                    <td class="meta-label" style="padding: 5px;">CSD QC Senior Engineer</td>
+                    <td style="padding: 5px;"><select class="employee-dropdown" id="dropdown-qc-engineer"><option value="">Select Area First</option></select></td>
+                    <td style="padding: 5px;"><input type="date" class="signatory-date"></td>
+                    <td class="signature-td-cell">
+                        <div class="signature-container">
+                            <div class="signature-pad-wrapper">
+                                <canvas id="sig-canvas-qc-engineer" class="signature-pad" width="180" height="42"></canvas>
+                                <img id="sig-img-qc-engineer" class="uploaded-img-preview" alt="Signature preview">
+                            </div>
+                            <div class="signature-actions">
+                                <button type="button" class="action-icon-btn btn-clear-sig" onclick="clearSignature('qc-engineer')" title="Clear Signature">
+                                    <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                </button>
+                                <button type="button" class="action-icon-btn btn-upload-sig" onclick="triggerUpload('file-qc-engineer')" title="Upload Image">
+                                    <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
+                                </button>
+                                <input type="file" id="file-qc-engineer" accept="image/*" style="display:none" onchange="handleSignatureUpload(this, 'qc-engineer')">
+                            </div>
+                        </div>
+                    </td>
                 </tr>
+                <!-- Qualification Coordinator Row -->
                 <tr>
-                    <td class="meta-label" style="width: 34.1797%; padding: 5px;">CSD Divisional Qualification Coordinator</td>
-                    <td style="width: 45%; padding: 5px;"><select class="employee-dropdown" id="dropdown-qual-coordinator"><option value="">Select Area First</option></select></td>
-                    <td style="width: 20.8203%; padding: 5px;"><input type="date" class="signatory-date"></td>
+                    <td class="meta-label" style="padding: 5px;">CSD Divisional Qualification Coordinator</td>
+                    <td style="padding: 5px;"><select class="employee-dropdown" id="dropdown-qual-coordinator"><option value="">Select Area First</option></select></td>
+                    <td style="padding: 5px;"><input type="date" class="signatory-date"></td>
+                    <td class="signature-td-cell">
+                        <div class="signature-container">
+                            <div class="signature-pad-wrapper">
+                                <canvas id="sig-canvas-qual-coordinator" class="signature-pad" width="180" height="42"></canvas>
+                                <img id="sig-img-qual-coordinator" class="uploaded-img-preview" alt="Signature preview">
+                            </div>
+                            <div class="signature-actions">
+                                <button type="button" class="action-icon-btn btn-clear-sig" onclick="clearSignature('qual-coordinator')" title="Clear Signature">
+                                    <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                </button>
+                                <button type="button" class="action-icon-btn btn-upload-sig" onclick="triggerUpload('file-qual-coordinator')" title="Upload Image">
+                                    <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
+                                </button>
+                                <input type="file" id="file-qual-coordinator" accept="image/*" style="display:none" onchange="handleSignatureUpload(this, 'qual-coordinator')">
+                            </div>
+                        </div>
+                    </td>
                 </tr>
+                <!-- Division Approval Label Header Divider Break -->
                 <tr>
-                    <td style="width: 34.1797%; padding: 5px;">Approved By:&nbsp;</td>
-                    <td style="width: 45%; padding: 5px;"><br></td>
-                    <td style="width: 20.8203%; padding: 5px;"><br></td>
+                    <td style="padding: 5px; font-weight: bold; border-top: 1px solid var(--border-color);" colspan="4">Approved By:&nbsp;</td>
                 </tr>
+                <!-- Division Manager Row -->
                 <tr>
-                    <td class="meta-label" style="width: 34.1797%; padding: 5px;">CSD Division Manager</td>
-                    <td style="width: 45%; padding: 5px;"><select id="dropdown-division-manager"><option value="">Select Area First</option></select></td>
-                    <td style="width: 20.8203%; padding: 5px;"><input type="date" class="signatory-date"></td>
+                    <td class="meta-label" style="padding: 5px;">CSD Division Manager</td>
+                    <td style="padding: 5px;"><select id="dropdown-division-manager"><option value="">Select Area First</option></select></td>
+                    <td style="padding: 5px;"><input type="date" class="signatory-date"></td>
+                    <td class="signature-td-cell">
+                        <div class="signature-container">
+                            <div class="signature-pad-wrapper">
+                                <canvas id="sig-canvas-division-manager" class="signature-pad" width="180" height="42"></canvas>
+                                <img id="sig-img-division-manager" class="uploaded-img-preview" alt="Signature preview">
+                            </div>
+                            <div class="signature-actions">
+                                <button type="button" class="action-icon-btn btn-clear-sig" onclick="clearSignature('division-manager')" title="Clear Signature">
+                                    <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                </button>
+                                <button type="button" class="action-icon-btn btn-upload-sig" onclick="triggerUpload('file-division-manager')" title="Upload Image">
+                                    <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
+                                </button>
+                                <input type="file" id="file-division-manager" accept="image/*" style="display:none" onchange="handleSignatureUpload(this, 'division-manager')">
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>
         <div class="footer-note">Archiving System Website: http://ngridsa-apps/amas Page 1 of 1</div>
     </div>
+    
     <script>
         let cachedEmployees = [];
+        const signaturePads = {};
 
         window.addEventListener('DOMContentLoaded', () => {
             const dropdown = document.getElementById('tc-contractor-dropdown');
@@ -756,6 +958,11 @@
             });
 
             document.getElementById('operating-area-dropdown').addEventListener('change', filterAndPopulateEmployees);
+
+            initSignaturePad('team-leader');
+            initSignaturePad('qc-engineer');
+            initSignaturePad('qual-coordinator');
+            initSignaturePad('division-manager');
         });
 
         function parseCSV(text) {
@@ -885,6 +1092,93 @@
             displayTarget.textContent = totalOverallScore.toFixed(2) + "% = " + evaluationRank;
             displayTarget.style.backgroundColor = bgColor;
             displayTarget.style.color = textColor;
+        }
+
+        function initSignaturePad(id) {
+            const canvas = document.getElementById(`sig-canvas-${id}`);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let drawing = false;
+
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 1.5;
+
+            function getMousePos(canvasDom, touchOrMouseEvent) {
+                const rect = canvasDom.getBoundingClientRect();
+                const clientX = touchOrMouseEvent.touches ? touchOrMouseEvent.touches[0].clientX : touchOrMouseEvent.clientX;
+                const clientY = touchOrMouseEvent.touches ? touchOrMouseEvent.touches[0].clientY : touchOrMouseEvent.clientY;
+                return {
+                    x: clientX - rect.left,
+                    y: clientY - rect.top
+                };
+            }
+
+            function startDrawing(e) {
+                drawing = true;
+                const pos = getMousePos(canvas, e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+                e.preventDefault();
+            }
+
+            function draw(e) {
+                if (!drawing) return;
+                const pos = getMousePos(canvas, e);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+                e.preventDefault();
+            }
+
+            function stopDrawing() {
+                drawing = false;
+            }
+
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseleave', stopDrawing);
+
+            canvas.addEventListener('touchstart', startDrawing);
+            canvas.addEventListener('touchmove', draw);
+            canvas.addEventListener('touchend', stopDrawing);
+
+            signaturePads[id] = { canvas, ctx };
+        }
+
+        function clearSignature(id) {
+            const pad = signaturePads[id];
+            if (pad) {
+                pad.ctx.clearRect(0, 0, pad.canvas.width, pad.canvas.height);
+            }
+            const img = document.getElementById(`sig-img-${id}`);
+            const canvas = document.getElementById(`sig-canvas-${id}`);
+            const fileInput = document.getElementById(`file-${id}`);
+            if (img && canvas && fileInput) {
+                img.src = "";
+                img.style.display = "none";
+                canvas.style.display = "block";
+                fileInput.value = "";
+            }
+        }
+
+        function triggerUpload(inputId) {
+            document.getElementById(inputId).click();
+        }
+
+        function handleSignatureUpload(input, id) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById(`sig-img-${id}`);
+                    const canvas = document.getElementById(`sig-canvas-${id}`);
+                    if (img && canvas) {
+                        img.src = e.target.result;
+                        img.style.display = "block";
+                        canvas.style.display = "none";
+                    }
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
         }
     </script>
 </body>
