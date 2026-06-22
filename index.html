@@ -498,7 +498,7 @@
 
 <body style="font-family: Arial, Helvetica, sans-serif; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
     <div class="control-panel">
-        <div><strong>Layout Updated:</strong> Dynamic Excel Sheet-level integration linked via Excel workbook source file parsing engines.</div>
+        <div><strong>Layout Updated:</strong> Dynamic Multi-Sheet Excel configuration combined with edge-to-edge signature rendering.</div>
         <button class="btn-print" onclick="window.print()">Print / Export to PDF</button>
     </div>
     <div class="page">
@@ -906,8 +906,8 @@
     </div>
     
     <script>
-        // Store workbook dynamically once processed client-side
         let employeeWorkbook = null;
+        const signaturePads = {};
 
         window.addEventListener('DOMContentLoaded', () => {
             const dropdown = document.getElementById('tc-contractor-dropdown');
@@ -932,18 +932,20 @@
                     dropdown.innerHTML = '<option value="" disabled selected>Error loading rowsource</option>';
                 });
 
-            // Read the binary Excel workbook array buffer directly via native fetch API
+            // Target Excel dynamic parser architecture
             fetch('_CSDEmployees.xlsx')
                 .then(response => {
-                    if (!response.ok) throw new Error('Excel structural data mapping sheet is missing.');
+                    if (!response.ok) throw new Error('Excel structural data mapping file is missing.');
                     return response.arrayBuffer();
                 })
                 .then(buffer => {
                     const data = new Uint8Array(buffer);
                     employeeWorkbook = XLSX.read(data, { type: 'array' });
-                    console.log('Successfully cached Excel sheets:', employeeWorkbook.SheetNames);
+                    console.log('Workbook successfully parsed! Found sheets:', employeeWorkbook.SheetNames);
                 })
-                .catch(error => console.error('Error loading _CSDEmployees.xlsx:', error));
+                .catch(error => {
+                    console.error('CRITICAL ERROR loading _CSDEmployees.xlsx:', error);
+                });
 
             document.getElementById('evaluation-date').addEventListener('change', function() {
                 const selectedDate = this.value;
@@ -960,63 +962,79 @@
             initSignaturePad('division-manager');
         });
 
-        // Dynamic Sheet level filtering function
+        // Safe fallback validation extractor mapping key-columns
+        function extractName(emp) {
+            if (!emp) return "";
+            return emp.EmployeeName || emp['Employee Name'] || emp.employeename || emp.Name || emp.name || Object.values(emp)[0] || "";
+        }
+
         function parseAndPopulateExcelSheets() {
             const area = document.getElementById('operating-area-dropdown').value;
-            if (!area || !employeeWorkbook) return;
+            console.log(`Operating Area selected: ${area}`);
+            
+            if (!area) return;
+            if (!employeeWorkbook) {
+                console.warn("Workbook context not loaded fully yet.");
+                return;
+            }
 
-            // Target sheet mapping definitions
-            const standardSheetName = area;       // e.g., "COA", "EOA"
-            const managerSheetName = 's' + area;   // e.g., "sCOA", "sEOA"
+            // Target sheets matching your sheet matrix architecture specifications
+            const standardSheetName = area;       // e.g., "COA"
+            const managerSheetName = 's' + area;   // e.g., "sCOA"
 
-            // Process Standard Employees Sheet
+            // 1. Process Standard Staff Sheet
             let standardStaff = [];
             if (employeeWorkbook.SheetNames.includes(standardSheetName)) {
                 const wsStandard = employeeWorkbook.Sheets[standardSheetName];
                 standardStaff = XLSX.utils.sheet_to_json(wsStandard);
             } else {
-                console.warn(`Target staff sheet [${standardSheetName}] not found in workbook.`);
+                console.error(`Sheet matching "${standardSheetName}" not found inside workbook layers.`);
             }
 
-            // Process Managers Sheet
+            // 2. Process Managers Sheet
             let managersStaff = [];
             if (employeeWorkbook.SheetNames.includes(managerSheetName)) {
                 const wsManager = employeeWorkbook.Sheets[managerSheetName];
                 managersStaff = XLSX.utils.sheet_to_json(wsManager);
             } else {
-                console.warn(`Target manager sheet [${managerSheetName}] not found in workbook.`);
+                console.error(`Sheet matching "${managerSheetName}" not found inside workbook layers.`);
             }
 
-            // helper function to populate standard and fallback lowercase configurations
-            function extractName(emp) {
-                return emp.EmployeeName || emp.employeename || emp.Name || emp.name || "";
-            }
-
-            // Populate Standard Signatory fields
+            // 3. Populate Standard Signatory Dropdowns
             const standardDropdowns = ['dropdown-team-leader', 'dropdown-qc-engineer', 'dropdown-qual-coordinator'];
             standardDropdowns.forEach(id => {
                 const select = document.getElementById(id);
                 select.innerHTML = '<option value="" disabled selected>Select Name</option>';
+                
+                if (standardStaff.length === 0) {
+                    select.innerHTML = '<option value="" disabled>No data found in sheet</option>';
+                }
+
                 standardStaff.forEach(emp => {
                     const name = extractName(emp);
-                    if (name) {
+                    if (name && String(name).trim() !== "") {
                         const opt = document.createElement('option');
-                        opt.value = name;
-                        opt.textContent = name;
+                        opt.value = String(name).trim();
+                        opt.textContent = String(name).trim();
                         select.appendChild(opt);
                     }
                 });
             });
 
-            // Populate Manager Dropdown element
+            // 4. Populate Manager Dropdown Element
             const managerSelect = document.getElementById('dropdown-division-manager');
             managerSelect.innerHTML = '<option value="" disabled selected>Select Name</option>';
+            
+            if (managersStaff.length === 0) {
+                managerSelect.innerHTML = '<option value="" disabled>No data found in sheet</option>';
+            }
+
             managersStaff.forEach(emp => {
                 const name = extractName(emp);
-                if (name) {
+                if (name && String(name).trim() !== "") {
                     const opt = document.createElement('option');
-                    opt.value = name;
-                    opt.textContent = name;
+                    opt.value = String(name).trim();
+                    opt.textContent = String(name).trim();
                     managerSelect.appendChild(opt);
                 }
             });
