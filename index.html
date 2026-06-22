@@ -196,6 +196,15 @@
             height: 100%;
         }
 
+        /* Maximizes input bounds up to container edges for target categories */
+        .tall-container {
+            height: 100%;
+        }
+
+        .tall-container input[type="number"].score-input {
+            padding: 8px 2px !important;
+        }
+
         input[type="number"].score-input {
             width: 100%;
             height: 100%;
@@ -519,7 +528,7 @@
 
 <body style="font-family: Arial, Helvetica, sans-serif; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
     <div class="control-panel">
-        <div><strong>Layout Reverted:</strong> Category rows returned to original default height specification tracking.</div>
+        <div><strong>Layout Updated:</strong> Input boxes for Categories 5 and 6 maxed out straight to container edges.</div>
         <button class="btn-print" onclick="window.print()">Print / Export to PDF</button>
     </div>
     <div class="page">
@@ -738,27 +747,27 @@
                 <tr class="category-row" data-weight="15">
                     <td class="category-title" style="padding: 3px; width: 31.4216%;" colspan="2">5.) Quality &amp; Availability of Testing Equipment/Tools</td>
                     <td style="padding: 0; width: 11.7625%;">
-                        <div class="input-container"><input type="number" min="90" max="100" class="score-input" data-color="var(--color-excellent)" data-text="#fff" oninput="handleInputRule(this)">
+                        <div class="input-container tall-container"><input type="number" min="90" max="100" class="score-input" data-color="var(--color-excellent)" data-text="#fff" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 90-100</div>
                         </div>
                     </td>
                     <td style="padding: 0; width: 12.2081%;">
-                        <div class="input-container"><input type="number" min="75" max="89" class="score-input" data-color="var(--color-very-good)" data-text="#fff" oninput="handleInputRule(this)">
+                        <div class="input-container tall-container"><input type="number" min="75" max="89" class="score-input" data-color="var(--color-very-good)" data-text="#fff" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 75-89</div>
                         </div>
                     </td>
                     <td style="padding: 0;">
-                        <div class="input-container"><input type="number" min="50" max="74" class="score-input" data-color="var(--color-average)" data-text="#000" oninput="handleInputRule(this)">
+                        <div class="input-container tall-container"><input type="number" min="50" max="74" class="score-input" data-color="var(--color-average)" data-text="#000" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 50-74</div>
                         </div>
                     </td>
                     <td style="padding: 0;">
-                        <div class="input-container"><input type="number" min="25" max="49" class="score-input" data-color="var(--color-poor)" data-text="#000" oninput="handleInputRule(this)">
+                        <div class="input-container tall-container"><input type="number" min="25" max="49" class="score-input" data-color="var(--color-poor)" data-text="#000" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 25-49</div>
                         </div>
                     </td>
                     <td style="padding: 0; width: 11.4522%;">
-                        <div class="input-container"><input type="number" min="0" max="24" class="score-input" data-color="var(--color-unacceptable)" data-text="#fff" oninput="handleInputRule(this)">
+                        <div class="input-container tall-container"><input type="number" min="0" max="24" class="score-input" data-color="var(--color-unacceptable)" data-text="#fff" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 0-24</div>
                         </div>
                     </td>
@@ -772,27 +781,27 @@
                 <tr class="category-row" data-weight="10">
                     <td class="category-title" style="padding: 3px; width: 31.4216%;" colspan="2">6.) Quality of Documents Preparation (As per CSD Procedures)</td>
                     <td style="padding: 0; width: 11.7625%;">
-                        <div class="input-container"><input type="number" min="90" max="100" class="score-input" data-color="var(--color-excellent)" data-text="#fff" oninput="handleInputRule(this)">
+                        <div class="input-container tall-container"><input type="number" min="90" max="100" class="score-input" data-color="var(--color-excellent)" data-text="#fff" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 90-100</div>
                         </div>
                     </td>
                     <td style="padding: 0; width: 12.2081%;">
-                        <div class="input-container"><input type="number" min="75" max="89" class="score-input" data-color="var(--color-very-good)" data-text="#fff" oninput="handleInputRule(this)">
+                        <div class="input-container tall-container"><input type="number" min="75" max="89" class="score-input" data-color="var(--color-very-good)" data-text="#fff" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 75-89</div>
                         </div>
                     </td>
                     <td style="padding: 0;">
-                        <div class="input-container"><input type="number" min="50" max="74" class="score-input" data-color="var(--color-average)" data-text="#000" oninput="handleInputRule(this)">
+                        <div class="input-container tall-container"><input type="number" min="50" max="74" class="score-input" data-color="var(--color-average)" data-text="#000" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 50-74</div>
                         </div>
                     </td>
                     <td style="padding: 0;">
-                        <div class="input-container"><input type="number" min="25" max="49" class="score-input" data-color="var(--color-poor)" data-text="#000" oninput="handleInputRule(this)">
+                        <div class="input-container tall-container"><input type="number" min="25" max="49" class="score-input" data-color="var(--color-poor)" data-text="#000" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 25-49</div>
                         </div>
                     </td>
                     <td style="padding: 0; width: 11.4522%;">
-                        <div class="input-container"><input type="number" min="0" max="24" class="score-input" data-color="var(--color-unacceptable)" data-text="#fff" oninput="handleInputRule(this)">
+                        <div class="input-container tall-container"><input type="number" min="0" max="24" class="score-input" data-color="var(--color-unacceptable)" data-text="#fff" oninput="handleInputRule(this)">
                             <div class="error-prompt">Range: 0-24</div>
                         </div>
                     </td>
@@ -977,7 +986,7 @@
                     dropdown.innerHTML = '<option value="" disabled selected>Error loading rowsource</option>';
                 });
 
-            // Fetches data cleanly from renamed lowercase file asset
+            // Reads data natively from the local file directory target asset location
             fetch('employees.xlsx')
                 .then(response => {
                     if (!response.ok) throw new Error('Excel structural data mapping file is missing.');
