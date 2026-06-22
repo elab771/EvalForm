@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>T&C Contractor Performance Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         :root {
             --primary-color: #0056b3;
@@ -115,7 +116,6 @@
             vertical-align: middle;
         }
 
-        /* Full-Cell Grid Expansion Styles for Meta Content fields */
         .full-cell-input-td {
             padding: 0 !important;
             height: 32px;
@@ -157,7 +157,6 @@
             word-wrap: break-word;
         }
 
-        /* Unified Full-Bleed Cell Format Engine rules for T&C Dropdown Container Elements */
         .contractor-container {
             position: absolute;
             top: 0;
@@ -174,7 +173,7 @@
             display: block;
             padding: 4px 22px 4px 6px;
             background-color: transparent;
-            white-space: normal;  /* Forces text wrapper layers to split long text blocks across lines */
+            white-space: normal;  
             word-break: break-word;
             line-height: 1.2;
         }
@@ -499,7 +498,7 @@
 
 <body style="font-family: Arial, Helvetica, sans-serif; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
     <div class="control-panel">
-        <div><strong>Layout Updated:</strong> T&amp;C Contractor dropdown formatted to full cell dimensions with explicit text wrapping.</div>
+        <div><strong>Layout Updated:</strong> Dynamic Excel Sheet-level integration linked via Excel workbook source file parsing engines.</div>
         <button class="btn-print" onclick="window.print()">Print / Export to PDF</button>
     </div>
     <div class="page">
@@ -547,7 +546,6 @@
                 </tr>
                 <tr>
                     <td class="meta-label" style="width: 18.5915%; padding: 1px; text-align: center;">T&amp;C Contractor:</td>
-                    <!-- Updated Table Cell and Container Wrapper matching full-bleed signature alignment specifications -->
                     <td class="full-cell-input-td" style="width: 46.7026%;">
                         <div class="contractor-container">
                             <select id="tc-contractor-dropdown">
@@ -801,7 +799,6 @@
             </tbody>
         </table>
         
-        <!-- Signatures Matrix -->
         <table class="sign-table" style="border-collapse: collapse; width: 100%;">
             <thead>
                 <tr>
@@ -812,7 +809,6 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Team Leader Row -->
                 <tr>
                     <td class="meta-label" style="padding: 5px;">CSD Team Leader</td>
                     <td style="padding: 5px;"><select class="employee-dropdown" id="dropdown-team-leader"><option value="">Select Area First</option></select></td>
@@ -835,7 +831,6 @@
                         </div>
                     </td>
                 </tr>
-                <!-- QC Senior Engineer Row -->
                 <tr>
                     <td class="meta-label" style="padding: 5px;">CSD QC Senior Engineer</td>
                     <td style="padding: 5px;"><select class="employee-dropdown" id="dropdown-qc-engineer"><option value="">Select Area First</option></select></td>
@@ -858,7 +853,6 @@
                         </div>
                     </td>
                 </tr>
-                <!-- Qualification Coordinator Row -->
                 <tr>
                     <td class="meta-label" style="padding: 5px;">CSD Divisional Qualification Coordinator</td>
                     <td style="padding: 5px;"><select class="employee-dropdown" id="dropdown-qual-coordinator"><option value="">Select Area First</option></select></td>
@@ -881,11 +875,9 @@
                         </div>
                     </td>
                 </tr>
-                <!-- Division Approval Label Header Divider Break -->
                 <tr>
                     <td style="padding: 5px; font-weight: bold; border-top: 1px solid var(--border-color);" colspan="4">Approved By:&nbsp;</td>
                 </tr>
-                <!-- Division Manager Row -->
                 <tr>
                     <td class="meta-label" style="padding: 5px;">CSD Division Manager</td>
                     <td style="padding: 5px;"><select id="dropdown-division-manager"><option value="">Select Area First</option></select></td>
@@ -914,8 +906,8 @@
     </div>
     
     <script>
-        let cachedEmployees = [];
-        const signaturePads = {};
+        // Store workbook dynamically once processed client-side
+        let employeeWorkbook = null;
 
         window.addEventListener('DOMContentLoaded', () => {
             const dropdown = document.getElementById('tc-contractor-dropdown');
@@ -940,15 +932,18 @@
                     dropdown.innerHTML = '<option value="" disabled selected>Error loading rowsource</option>';
                 });
 
-            fetch('CSDEmployees.csv')
+            // Read the binary Excel workbook array buffer directly via native fetch API
+            fetch('_CSDEmployees.xlsx')
                 .then(response => {
-                    if (!response.ok) throw new Error('CSD Employees file missing.');
-                    return response.text();
+                    if (!response.ok) throw new Error('Excel structural data mapping sheet is missing.');
+                    return response.arrayBuffer();
                 })
-                .then(text => {
-                    cachedEmployees = parseCSV(text);
+                .then(buffer => {
+                    const data = new Uint8Array(buffer);
+                    employeeWorkbook = XLSX.read(data, { type: 'array' });
+                    console.log('Successfully cached Excel sheets:', employeeWorkbook.SheetNames);
                 })
-                .catch(error => console.error('Error loading CSDEmployees.csv:', error));
+                .catch(error => console.error('Error loading _CSDEmployees.xlsx:', error));
 
             document.getElementById('evaluation-date').addEventListener('change', function() {
                 const selectedDate = this.value;
@@ -957,7 +952,7 @@
                 });
             });
 
-            document.getElementById('operating-area-dropdown').addEventListener('change', filterAndPopulateEmployees);
+            document.getElementById('operating-area-dropdown').addEventListener('change', parseAndPopulateExcelSheets);
 
             initSignaturePad('team-leader');
             initSignaturePad('qc-engineer');
@@ -965,53 +960,65 @@
             initSignaturePad('division-manager');
         });
 
-        function parseCSV(text) {
-            const lines = text.split(/\r?\n/).filter(line => line.trim() !== "");
-            if (lines.length === 0) return [];
-            const headers = lines[0].split(',').map(h => h.trim());
-            return lines.slice(1).map(line => {
-                const values = line.split(',').map(v => v.trim());
-                const obj = {};
-                headers.forEach((header, i) => {
-                    obj[header] = values[i] || "";
-                });
-                return obj;
-            });
-        }
-
-        function filterAndPopulateEmployees() {
+        // Dynamic Sheet level filtering function
+        function parseAndPopulateExcelSheets() {
             const area = document.getElementById('operating-area-dropdown').value;
-            if (!area || cachedEmployees.length === 0) return;
+            if (!area || !employeeWorkbook) return;
 
-            const areaStaff = cachedEmployees.filter(emp => (emp.Area || emp.area) === area);
-            
-            const divisionManagers = cachedEmployees.filter(emp => {
-                const empArea = emp.Area || emp.area;
-                const empNat = emp.Nationality || emp.nationality;
-                return empArea === area && empNat && empNat.toLowerCase() === 'saudi';
-            });
+            // Target sheet mapping definitions
+            const standardSheetName = area;       // e.g., "COA", "EOA"
+            const managerSheetName = 's' + area;   // e.g., "sCOA", "sEOA"
 
+            // Process Standard Employees Sheet
+            let standardStaff = [];
+            if (employeeWorkbook.SheetNames.includes(standardSheetName)) {
+                const wsStandard = employeeWorkbook.Sheets[standardSheetName];
+                standardStaff = XLSX.utils.sheet_to_json(wsStandard);
+            } else {
+                console.warn(`Target staff sheet [${standardSheetName}] not found in workbook.`);
+            }
+
+            // Process Managers Sheet
+            let managersStaff = [];
+            if (employeeWorkbook.SheetNames.includes(managerSheetName)) {
+                const wsManager = employeeWorkbook.Sheets[managerSheetName];
+                managersStaff = XLSX.utils.sheet_to_json(wsManager);
+            } else {
+                console.warn(`Target manager sheet [${managerSheetName}] not found in workbook.`);
+            }
+
+            // helper function to populate standard and fallback lowercase configurations
+            function extractName(emp) {
+                return emp.EmployeeName || emp.employeename || emp.Name || emp.name || "";
+            }
+
+            // Populate Standard Signatory fields
             const standardDropdowns = ['dropdown-team-leader', 'dropdown-qc-engineer', 'dropdown-qual-coordinator'];
             standardDropdowns.forEach(id => {
                 const select = document.getElementById(id);
                 select.innerHTML = '<option value="" disabled selected>Select Name</option>';
-                areaStaff.forEach(emp => {
-                    const name = emp.EmployeeName || emp.employeename;
-                    const opt = document.createElement('option');
-                    opt.value = name;
-                    opt.textContent = name;
-                    select.appendChild(opt);
+                standardStaff.forEach(emp => {
+                    const name = extractName(emp);
+                    if (name) {
+                        const opt = document.createElement('option');
+                        opt.value = name;
+                        opt.textContent = name;
+                        select.appendChild(opt);
+                    }
                 });
             });
 
+            // Populate Manager Dropdown element
             const managerSelect = document.getElementById('dropdown-division-manager');
             managerSelect.innerHTML = '<option value="" disabled selected>Select Name</option>';
-            divisionManagers.forEach(emp => {
-                const name = emp.EmployeeName || emp.employeename;
-                const opt = document.createElement('option');
-                opt.value = name;
-                opt.textContent = name;
-                managerSelect.appendChild(opt);
+            managersStaff.forEach(emp => {
+                const name = extractName(emp);
+                if (name) {
+                    const opt = document.createElement('option');
+                    opt.value = name;
+                    opt.textContent = name;
+                    managerSelect.appendChild(opt);
+                }
             });
         }
         
