@@ -932,12 +932,12 @@
                     dropdown.innerHTML = '<option value="" disabled selected>Error loading rowsource</option>';
                 });
 
-            // Target Excel dynamic parser architecture
-            fetch('_CSDEmployees.xlsx')
-                .then(response => {
-                    if (!response.ok) throw new Error('Excel structural data mapping file is missing.');
-                    return response.arrayBuffer();
-                })
+                    // Fetching the workbook file from your repository
+                fetch('employees.xlsx')
+                    .then(response => {
+                        if (!response.ok) throw new Error('Excel structural data mapping file is missing.');
+                        return response.arrayBuffer();
+                    })
                 .then(buffer => {
                     const data = new Uint8Array(buffer);
                     employeeWorkbook = XLSX.read(data, { type: 'array' });
